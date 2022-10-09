@@ -1,10 +1,10 @@
-
-import Person from './components/Person';
+import Person from './component/person' 
+import './App.css';
 
 function App() {
   return (
     <div>
-     <Person />
+      <Person />
     </div>
   );
 }
