@@ -5,30 +5,42 @@ function Person () {
     const [ name, setName ] = useState( "firas" );
     const [ age, setAge ] = useState( 22 );
     const [ gender, setGender ] = useState( "male" );
+    const [newAge, setNewAge] = useState(" ");
+
 
     function handleSubmit ( event ) {
         event.preventDefault();
         setName( event.target.newName.value );
         setGender( event.target.gender.value );
         setAge( event.target.age.value );
-        axios.post( `${process.env.REACT_APP_SERVER}/person?name=${name}&age=${age}&gender=${gender}` )
-            .then( response => {
-                setAge( response.data );
-            } )
-            .catch( error => {
-                console.log( error );
-            } );
+        getNewAge();
+      
     }
+
+    async function getNewAge() {
+    
+        await axios.post(`${process.env.REACT_APP_SERVER}person?name=${name}&age=${age}&gender=${gender}`)
+        .then(response => {
+            setNewAge(response.data)
+            console.log(response.data)
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        
+      }
     return (
         <>
-        <div>
+        <div class = "person">
             <h2>Person</h2>
             <p data-testid="name">My name is {name}</p>
             <p data-testid="age">My age is {age}</p>
             <p data-testid="gender">My gender is {gender}</p>
+            <p>Click twice on sumbit to see the new age!</p>
+            {newAge && <p data-testid="newAge">My new age is {newAge}</p>}
         </div>
         <div>
-            <form onSubmit={handleSubmit}>
+            <form class = "personForm" onSubmit={handleSubmit}>
                 <label>
                     Name:
                     <input type="text" name="newName" data-testid="name-input" />
@@ -48,6 +60,7 @@ function Person () {
                     </select>
                 </label>
                 <br />
+                
                 <input type="submit" value="Submit" data-testid="submit"/>
             </form>
         </div>
